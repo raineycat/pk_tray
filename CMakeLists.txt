@@ -4,8 +4,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(CMAKE_MSVC_RUNTIME_LIBRARY MultiThreaded$<$<CONFIG:Debug>:Debug>)
 
-add_custom_target(ALL COMMAND "echo MultiThreaded$<$<CONFIG:Debug>:Debug>")
-
 project(pktray
 	DESCRIPTION "Interact with thr PluralKit API from the windows system tray"
 	VERSION "0.1.0.0"
