@@ -275,8 +275,11 @@ namespace pk {
 			MENUITEMINFOA info{ 0 };
 			info.cbSize = sizeof(info);
 			info.fMask = MIIM_STATE;
-			info.fState &= ~MFS_CHECKED;
+			if (!GetMenuItemInfoA(menu, i, TRUE, &info)) {
+				continue;
+			}
 
+			info.fState &= ~MFS_CHECKED;
 			SetMenuItemInfoA(menu, i, TRUE, &info);
 		}
 	}
