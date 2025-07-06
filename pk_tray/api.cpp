@@ -60,8 +60,17 @@ namespace pk {
 		
 		req.recieve();
 		unsigned int status = req.getStatus();
-		auto resp = req.readString();
-		assert(status == 200);
+		auto resp = nlohmann::json::parse(req.readString());
+
+		if (status != 200) {
+			if (resp["code"] == 40004) {
+				// this is fine to ignore
+				// (the selected is already fronting)
+				return;
+			}
+			
+			assert(status == 200);
+		}
 	}
 
 	sResponseData cPluralKit::getEndpoint(const std::string& path) {

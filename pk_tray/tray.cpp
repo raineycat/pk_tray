@@ -122,8 +122,8 @@ namespace pk {
 		AppendMenuA(mContextMenu, MF_SEPARATOR, NULL, NULL);
 
 		AppendMenuA(mContextMenu, MF_STRING | MF_GRAYED, NULL, "[System]");
-		AppendMenuA(mContextMenu, MF_STRING, ID_TRAY_TEST, "Test");
-		AppendMenuA(mContextMenu, MF_STRING | MF_GRAYED, ID_TRAY_MY_SYSTEM, "My system");
+		// AppendMenuA(mContextMenu, MF_STRING, ID_TRAY_TEST, "Test");
+		AppendMenuA(mContextMenu, MF_STRING | MF_GRAYED, ID_TRAY_MY_SYSTEM, "View system info");
 		AppendMenuA(mContextMenu, MF_SEPARATOR, NULL, NULL);
 
 		AppendMenuA(mContextMenu, MF_STRING | MF_GRAYED, NULL, "[Fronter]");
