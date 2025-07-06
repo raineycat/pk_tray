@@ -36,16 +36,28 @@ namespace pk {
 		}
 	}
 
+	struct sSystemInfoData {
+		models::sSystem system;
+		std::vector<models::sMember> members;
+	};
+
 	static LRESULT CALLBACK SystemInfoDialogProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
-		models::sSystem* system = reinterpret_cast<models::sSystem*>(lParam);
+		sSystemInfoData* info = reinterpret_cast<sSystemInfoData*>(lParam);
+		HWND memberList;
 
 		switch (msg)
 		{
 		case WM_INITDIALOG:
-			SetWindowTextA(hWnd, system->name.c_str());
-			SetDlgItemTextA(hWnd, IDC_SYSTEM_NAME, system->name.c_str());
-			SetDlgItemTextA(hWnd, IDC_SYSTEM_PRONOUNS, system->pronouns.c_str());
-			SetDlgItemTextA(hWnd, IDC_SYSTEM_DESC, system->description.c_str());
+			SetWindowTextA(hWnd, info->system.name.c_str());
+			SetDlgItemTextA(hWnd, IDC_SYSTEM_NAME, info->system.name.c_str());
+			SetDlgItemTextA(hWnd, IDC_SYSTEM_PRONOUNS, info->system.pronouns.c_str());
+			SetDlgItemTextA(hWnd, IDC_SYSTEM_DESC, info->system.description.c_str());
+			
+			memberList = GetDlgItem(hWnd, IDC_MEMBER_LIST);
+			for (const auto& member : info->members) {
+				int pos = (int)SendMessage(memberList, LB_ADDSTRING, 0, (LPARAM)member.display_name.c_str());
+			}
+
 			return (INT_PTR)TRUE;
 
 		case WM_COMMAND:
@@ -58,6 +70,7 @@ namespace pk {
 				}
 				break;
 			}
+			break;
 
 		case WM_CLOSE:
 			EndDialog(hWnd, LOWORD(wParam));
@@ -123,7 +136,7 @@ namespace pk {
 
 		AppendMenuA(mContextMenu, MF_STRING | MF_GRAYED, NULL, "[System]");
 		// AppendMenuA(mContextMenu, MF_STRING, ID_TRAY_TEST, "Test");
-		AppendMenuA(mContextMenu, MF_STRING | MF_GRAYED, ID_TRAY_MY_SYSTEM, "View system info");
+		AppendMenuA(mContextMenu, MF_STRING, ID_TRAY_MY_SYSTEM, "View system info");
 		AppendMenuA(mContextMenu, MF_SEPARATOR, NULL, NULL);
 
 		AppendMenuA(mContextMenu, MF_STRING | MF_GRAYED, NULL, "[Fronter]");
@@ -259,12 +272,16 @@ namespace pk {
 	}
 
 	void cTrayApp::showSystemDialog(const models::sSystem& sys) {
+		sSystemInfoData data;
+		data.system = sys;
+		data.members = mPK.getMembers(sys);
+
 		HWND handle = CreateDialogParamA(
 			mInstance,
 			MAKEINTRESOURCEA(IDD_SYSTEM_INFO),
 			mWindow,
 			SystemInfoDialogProc,
-			reinterpret_cast<LPARAM>(&sys));
+			reinterpret_cast<LPARAM>(&data));
 
 		ShowWindow(handle, SW_SHOW);
 	}

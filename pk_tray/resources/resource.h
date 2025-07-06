@@ -7,7 +7,7 @@
 #define IDD_SYSTEM_INFO                 103
 #define IDC_SYSTEM_PRONOUNS             1001
 #define IDC_SYSTEM_DESC                 1002
-#define IDC_LIST1                       1003
+#define IDC_MEMBER_LIST                 1003
 #define IDC_SYSTEM_NAME                 -1
 
 // Next default values for new objects
